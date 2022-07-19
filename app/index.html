@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Microsoft Hackathon App</title>
+    <style type="text/css" media="all">
+html, body {
+    padding: 0;
+    margin: 0;
+}
+#app {
+    min-height: 100vh;
+}
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script crossorigin="anonymous" type="module" id="">
+        import * as Bokeh from "@bokeh/bokehjs/build/js/lib/api"
+        import * as Plotting from "@bokeh/bokehjs/build/js/lib/api/plotting.js"
+
+        let figure = Plotting.figure({
+            x_range: new Bokeh.Range1d({ start: 0, end: 1e6 }),
+            y_range: new Bokeh.Range1d({ start: 0, end: 1e6 }),
+            sizing_mode: "stretch_both"
+        })
+        let url = "https://c.tile.openstreetmap.org/{Z}/{X}/{Y}.png"
+        let tile_source = new Bokeh.WMTSTileSource({
+            url
+        })
+        let tile_renderer = new Bokeh.TileRenderer({ tile_source })
+        figure.add_renderers(tile_renderer)
+        figure.circle({
+            x: [1, 2, 3],
+            y: [1, 2, 3]
+        })
+        let row = new Bokeh.Column({ children: [figure], sizing_mode: "stretch_width"})
+        Plotting.show(row, document.getElementById("app"))
+    </script>
+</body>
+</html>
