@@ -15,13 +15,30 @@ html, body {
 </head>
 <body>
     <div id="app"></div>
-    <script crossorigin="anonymous" type="module" id="">
+    <script type="module" id="">
         import * as Bokeh from "@bokeh/bokehjs/build/js/lib/api"
         import * as Plotting from "@bokeh/bokehjs/build/js/lib/api/plotting.js"
 
+        import { toMercator } from "./mercator.js"
+            
+
+        // Find UK bounding box in Mercator coordinates
+        let dlon = 5
+        let dlat = 5
+        let centralLat = 55
+        let centralLon = 3
+        let end = toMercator({
+            latitude: centralLat + dlat,
+            longitude: centralLon + dlon
+        })
+        let start = toMercator({
+            latitude: centralLat - dlat,
+            longitude: centralLon - dlon
+        })
+
         let figure = Plotting.figure({
-            x_range: new Bokeh.Range1d({ start: 0, end: 1e6 }),
-            y_range: new Bokeh.Range1d({ start: 0, end: 1e6 }),
+            x_range: new Bokeh.Range1d({ start: start.x, end: end.x }),
+            y_range: new Bokeh.Range1d({ start: start.y, end: end.y }),
             sizing_mode: "stretch_both"
         })
         let url = "https://c.tile.openstreetmap.org/{Z}/{X}/{Y}.png"
